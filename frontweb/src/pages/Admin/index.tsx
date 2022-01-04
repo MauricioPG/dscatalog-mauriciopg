@@ -1,4 +1,5 @@
-import Navbar from "./Navbar";
+import { Route, Switch } from 'react-router-dom';
+import Navbar from './Navbar';
 import './styles.css';
 
 const Admin = () => {
@@ -6,7 +7,17 @@ const Admin = () => {
     <div className="admin-container">
       <Navbar />
       <div className="admin-content">
-          <h1>Conteudo</h1>
+        <Switch>
+          <Route path="/admin/products">
+            <h1>Product CRUD</h1>
+          </Route>
+          <Route path="/admin/categories">
+            <h1>Category CRUD</h1>
+          </Route>
+          <Route path="/admin/users">
+            <h1>Usewr CRUD</h1>
+          </Route>
+        </Switch>
       </div>
     </div>
   );
