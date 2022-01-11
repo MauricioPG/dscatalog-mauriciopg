@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import Pagination from 'components/Pagination';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from 'types/product';
-import { AxiosParams } from 'types/vendor/axios';
+// import { AxiosParams } from 'types/vendor/axios';
 import { SpringPage } from 'types/vendor/spring';
 import { BASE_URL } from 'util/requests';
 import ProductCard from '../../components/ProductCard';
@@ -14,8 +14,22 @@ const Catalog = () => {
   const [page, setPage] = useState<SpringPage<Product>>();
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  /* Refatorando na aula 9-11, o tipo axios não precisa 
+   mais ser utilizado
+  por conta do AxiosRequestConfig */
+  /* useEffect(() => {
     const params: AxiosParams = {
+    const params: AxiosRequestConfig = { 
+      method: 'GET',
+      url: `${BASE_URL}/products`,
+      params: {
+        page: 0,
+        size: 12,
+      },
+    }; */
+
+  useEffect(() => {
+    const params: AxiosRequestConfig = {
       method: 'GET',
       url: `${BASE_URL}/products`,
       params: {
