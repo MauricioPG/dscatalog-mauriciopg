@@ -13,7 +13,7 @@ type LoginResponse = {
   userId: number;
 };
 
-type Role = 'ROLE_OPERATOR' | 'ROLE_ADMIN';
+export type Role = 'ROLE_OPERATOR' | 'ROLE_ADMIN';
 
 export type TokenData = {
   exp: number;
@@ -97,7 +97,7 @@ axios.interceptors.response.use(
   },
   function (error) {
     // out of 200
-    if (error.response.status === 401 || error.response.status === 403) {
+    if (error.response.status === 401) {
       history.push('/admin/auth');
     }
     return Promise.reject(error);
