@@ -16,7 +16,7 @@ const ProductCrudCard = ({ product }: Props) => {
       </div>
 
       {/* --- DIV CENTER MAIN  */}
-      <div className="product-crud-main">
+      <div className="product-crud-card-decription">
         {/* --- DIV DESCRIPTION */}
         <div className="product-crud-card-bottom-container">
           <h6>{product.name}</h6>
@@ -29,16 +29,22 @@ const ProductCrudCard = ({ product }: Props) => {
             <CategoryBadge name={category.name} key={category.id} />
           ))}
         </div>
+      </div>
 
-        {/* --- DIV BUTTONS */}
-        <div className="product-crud-card-buttons-container">
-          <button type="button" className="btn btn-outline-danger product-crud-card-button product-crud-card-button-first">
-            EXCLUIR
-          </button>
-          <button type="button" className="btn btn-outline-secondary product-crud-card-button">
-            EDITAR
-          </button>
-        </div>
+      {/* --- DIV BUTTONS */}
+      <div className="product-crud-card-buttons-container">
+        <button
+          type="button"
+          className="btn btn-outline-danger product-crud-card-button product-crud-card-button-first"
+        >
+          EXCLUIR
+        </button>
+        <button
+          type="button"
+          className="btn btn-outline-secondary product-crud-card-button"
+        >
+          EDITAR
+        </button>
       </div>
     </div>
   );
