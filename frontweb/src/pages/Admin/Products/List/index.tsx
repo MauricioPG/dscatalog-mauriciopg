@@ -14,11 +14,15 @@ const List = () => {
     categories: [
       {
         id: 1,
-        name: 'Livros',
+        name: 'Eletrônicos',
       },
       {
         id: 2,
-        name: 'Eletrônicos',
+        name: 'Computadores',
+      },
+      {
+        id: 3,
+        name: 'Celulares',
       },
     ],
   };
