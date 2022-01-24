@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
+import Select from 'react-select';
 import { Product } from 'types/product';
 import { requestBackend } from 'util/requests';
 import './styles.css';
@@ -11,6 +12,14 @@ type UrlParams = {
 };
 
 const Form = () => {
+
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+  ]
+
+
   const { productId } = useParams<UrlParams>();
   const isEditing = productId !== 'create';
   const history = useHistory();
@@ -96,6 +105,18 @@ const Form = () => {
                 </div>
               </div>
 
+              {/* combo box categories */}
+              <div className="margin-botttom-30">
+                    <Select
+                    options={options}
+                    classNamePrefix="product-crud-select"
+                    isMulti
+
+                    />
+              </div>
+
+
+
               <div className="margin-botttom-30">
                 <input
                   {...register('price', {
@@ -111,10 +132,6 @@ const Form = () => {
                 <div className="invalid-feedback d-block">
                   {errors.price?.message}
                 </div>
-              </div>
-
-              <div className="product-crud-input">
-                <input type="text" className="form-control base-input" />
               </div>
             </div>
 
