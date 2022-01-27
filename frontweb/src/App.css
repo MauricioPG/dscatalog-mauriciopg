@@ -37,3 +37,9 @@ a:hover {
 .base-input::placeholder {
   color: #9e9e9e;
 }
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
