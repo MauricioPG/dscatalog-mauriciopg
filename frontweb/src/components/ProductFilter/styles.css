@@ -46,6 +46,22 @@
   display: none;
 }
 
+.product-filter-select__control {
+  font-size: 1em;
+  letter-spacing: -0.015em;
+  color: #263238;
+  border: none !important;
+  border-bottom: 1px solid #E1E1E1 !important;
+}
+
+.product-filter-select__placeholder {
+  color: #9e9e9e !important;
+}
+
+.product-filter-select__indicator-separator {
+  display: none;
+}
+
 @media (min-width: 576px) {
   .btn-product-filter-word {
     display: unset;

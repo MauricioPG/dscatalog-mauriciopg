@@ -7,7 +7,11 @@ import Select from 'react-select';
 import { Category } from 'types/category';
 import { Product } from 'types/product';
 import { requestBackend } from 'util/requests';
+
+import { toast } from 'react-toastify';
+
 import './styles.css';
+import { error } from 'console';
 
 type UrlParams = {
   productId: string;
@@ -58,13 +62,18 @@ const Form = () => {
     };
     const config: AxiosRequestConfig = {
       method: isEditing ? 'PUT' : 'POST',
-      url: isEditing ? `/products/${productId}` : '/products',
+      url: isEditing ? `/products/${productId}` : '/productsx',
       data: data,
       withCredentials: true,
     };
 
-    requestBackend(config).then((response) => {
+    requestBackend(config)
+    .then(() => {
+      toast.info('Produto cadastrado com sucesso!');
       history.push('/admin/products');
+    })
+    .catch((response) => {
+      toast.error("Erro ao cadastrar o produto ");
     });
   };
 
