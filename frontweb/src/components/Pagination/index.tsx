@@ -24,12 +24,12 @@ const Pagination = ({ forcePage, pageCount, range, onChange }: Props) => {
       activeLinkClassName="pagination-link-active"
       disabledLinkClassName="arrow-inactive"
       previousLabel={
-        <div className="pagination-arrow-container">
+        <div className="pagination-arrow-container" data-testid="arrow-previous">
           <ArrowIcon />
         </div>
       }
       nextLabel={
-        <div className="pagination-arrow-container">
+        <div className="pagination-arrow-container" data-testid="arrow-next">
           <ArrowIcon />
         </div>
       }
