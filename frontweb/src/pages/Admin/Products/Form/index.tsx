@@ -62,7 +62,7 @@ const Form = () => {
     };
     const config: AxiosRequestConfig = {
       method: isEditing ? 'PUT' : 'POST',
-      url: isEditing ? `/products/${productId}` : '/productsx',
+      url: isEditing ? `/products/${productId}` : '/products',
       data: data,
       withCredentials: true,
     };
@@ -104,6 +104,7 @@ const Form = () => {
                   }`}
                   placeholder="Nome do produto"
                   name="name"
+                  data-testid="name"
                 />
                 <div className="invalid-feedback d-block">
                   {errors.name && errors.name.type === 'minLength' && (
@@ -120,6 +121,8 @@ const Form = () => {
               {/* combo box categories */}
               {/* Obs: field desestruturado */}
               <div className="margin-botttom-30">
+              {/* para o teste */}
+              <label htmlFor="categories" className="d-none">Categorias</label>
                 <Controller
                   name="categories"
                   rules={{ required: true }}
@@ -132,6 +135,8 @@ const Form = () => {
                       isMulti
                       getOptionLabel={(categoy: Category) => categoy.name}
                       getOptionValue={(categoy: Category) => String(categoy.id)}
+                      //por conta do teste
+                      inputId="categories"
                     />
                   )}
                 />
@@ -156,6 +161,7 @@ const Form = () => {
                       disableGroupSeparators={true}
                       value={field.value}
                       onValueChange={field.onChange}
+                      data-testid="price"
                     />
                   )}
                 />
@@ -180,6 +186,7 @@ const Form = () => {
                   }`}
                   placeholder="URL da imagem do produto"
                   name="imgUrl"
+                  data-testid="imgUrl"
                 />
                 <div className="invalid-feedback d-block">
                   {errors.imgUrl?.message}
@@ -201,6 +208,7 @@ const Form = () => {
                   }`}
                   placeholder="Descrição"
                   name="description"
+                  data-testid="description"
                 />
                 <div className="invalid-feedback d-block">
                   {errors.description?.message}
