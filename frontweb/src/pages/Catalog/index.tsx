@@ -3,7 +3,6 @@ import Pagination from 'components/Pagination';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from 'types/product';
-// import { AxiosParams } from 'types/vendor/axios';
 import { SpringPage } from 'types/vendor/spring';
 import { requestBackend } from 'util/requests';
 import ProductCard from '../../components/ProductCard';
@@ -13,20 +12,6 @@ import './styles.css';
 const Catalog = () => {
    const [page, setPage] = useState<SpringPage<Product>>();
    const [isLoading, setIsLoading] = useState(false);
-
-   /* Refatorando na aula 9-11, o tipo axios não precisa 
-   mais ser utilizado
-  por conta do AxiosRequestConfig */
-   /* useEffect(() => {
-    const params: AxiosParams = {
-    const params: AxiosRequestConfig = { 
-      method: 'GET',
-      url: `${BASE_URL}/products`,
-      params: {
-        page: 0,
-        size: 12,
-      },
-    }; */
 
    const getProducts = (pageNumber: number) => {
       const params: AxiosRequestConfig = {

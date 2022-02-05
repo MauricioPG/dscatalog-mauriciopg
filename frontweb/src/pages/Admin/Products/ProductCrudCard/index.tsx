@@ -7,68 +7,61 @@ import { AxiosRequestConfig } from 'axios';
 import { requestBackend } from 'util/requests';
 
 type Props = {
-  product: Product;
-  onDelete: Function;
+   product: Product;
+   onDelete: Function;
 };
 
 const ProductCrudCard = ({ product, onDelete }: Props) => {
+   const handleDelete = (productId: number) => {
+      if (!window.confirm('Tem certeza que deseja excluir?')) {
+         return;
+      }
 
-  const handleDelete = (productId: number) => {
+      const config: AxiosRequestConfig = {
+         method: 'DELETE',
+         url: `/products/${productId}`,
+         withCredentials: true,
+      };
 
-    if (!window.confirm("Tem certeza que deseja excluir?")) {
-      return
-    }
+      requestBackend(config).then(() => {
+         onDelete();
+      });
+   };
 
-    const config: AxiosRequestConfig = {
-      method: 'DELETE',
-      url: `/products/${productId}`,
-      withCredentials: true,
-    };
+   return (
+      <div className="base-card product-crud-card">
+         <div className="product-crud-card-top-container">
+            <img src={product.imgUrl} alt={product.description} />
+         </div>
 
-    requestBackend(config).then(() => {
-      onDelete();
-    });
-  };
+         <div className="product-crud-card-decription">
+            <div className="product-crud-card-bottom-container">
+               <h6>{product.name}</h6>
+               <ProductPrice price={product.price} />
+            </div>
 
-  return (
-    <div className="base-card product-crud-card">
-      {/* --- DIV IMAGE */}
-      <div className="product-crud-card-top-container">
-        <img src={product.imgUrl} alt={product.description} />
+            <div className="product-crud-categories-container">
+               {product.categories.map((category) => (
+                  <CategoryBadge name={category.name} key={category.id} />
+               ))}
+            </div>
+         </div>
+
+         <div className="product-crud-card-buttons-container">
+            <button
+               onClick={() => handleDelete(product.id)}
+               className="btn btn-outline-danger product-crud-card-button product-crud-card-button-first"
+            >
+               EXCLUIR
+            </button>
+            <Link to={`/admin/products/${product.id}`}>
+               <button className="btn btn-outline-secondary product-crud-card-button">
+                  EDITAR
+               </button>
+            </Link>
+         </div>
       </div>
-
-      {/* --- DIV CENTER MAIN  */}
-      <div className="product-crud-card-decription">
-        {/* --- DIV DESCRIPTION */}
-        <div className="product-crud-card-bottom-container">
-          <h6>{product.name}</h6>
-          <ProductPrice price={product.price} />
-        </div>
-
-        {/* --- DIV BADGES */}
-        <div className="product-crud-categories-container">
-          {product.categories.map((category) => (
-            <CategoryBadge name={category.name} key={category.id} />
-          ))}
-        </div>
-      </div>
-
-      {/* --- DIV BUTTONS */}
-      <div className="product-crud-card-buttons-container">
-        <button
-          onClick={() => handleDelete(product.id)}
-          className="btn btn-outline-danger product-crud-card-button product-crud-card-button-first"
-        >
-          EXCLUIR
-        </button>
-        <Link to={`/admin/products/${product.id}`}>
-          <button className="btn btn-outline-secondary product-crud-card-button">
-            EDITAR
-          </button>
-        </Link>
-      </div>
-    </div>
-  );
+   );
 };
 
 export default ProductCrudCard;

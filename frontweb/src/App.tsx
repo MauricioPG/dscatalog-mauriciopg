@@ -8,18 +8,17 @@ import { AuthContext, AuthContextData } from 'AuthContext';
 
 import { ToastContainer } from 'react-toastify';
 
-
 function App() {
-  const [authContextData, setAuthContextData] = useState<AuthContextData>({
-    authenticated: false,
-  });
+   const [authContextData, setAuthContextData] = useState<AuthContextData>({
+      authenticated: false,
+   });
 
-  return (
-    <AuthContext.Provider value={{ authContextData, setAuthContextData }}>
-      <Routes />;
-      <ToastContainer />
-    </AuthContext.Provider>
-  );
+   return (
+      <AuthContext.Provider value={{ authContextData, setAuthContextData }}>
+         <Routes />;
+         <ToastContainer />
+      </AuthContext.Provider>
+   );
 }
 
 export default App;

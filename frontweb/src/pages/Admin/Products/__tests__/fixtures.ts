@@ -69,11 +69,11 @@ export const server = setupServer(
    rest.get(`${BASE_URL}/categories`, (req, res, ctx) => {
       return res(ctx.status(200), ctx.json(findCategoriesResponse));
    }),
-   //para o create
+
    rest.post(`${BASE_URL}/products`, (req, res, ctx) => {
       return res(ctx.status(201), ctx.json(productResponse));
    }),
-   // para o update
+
    rest.get(`${BASE_URL}/products/:productId`, (req, res, ctx) => {
       return res(ctx.status(200), ctx.json(productResponse));
    }),

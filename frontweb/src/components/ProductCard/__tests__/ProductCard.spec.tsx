@@ -5,7 +5,6 @@ import ProductCard from "..";
 
 describe('ProductCard  tests', () => {
     test('Should render ProductCard', () => {
-      //ARRANGE
 
       const product : Product = {
         name: "Computador",
@@ -14,13 +13,8 @@ describe('ProductCard  tests', () => {
       } as Product;
 
   
-      //ACT
       render(<ProductCard product =  {product} />);
   
-      // eslint-disable-next-line testing-library/no-debugging-utils
-      //screen.debug();
-  
-      //ASSERT
       expect(screen.getByText(product.name)).toBeInTheDocument();
       expect(screen.getByAltText(product.name)).toBeInTheDocument();
       expect(screen.getByText("R$")).toBeInTheDocument();

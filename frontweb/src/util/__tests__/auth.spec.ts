@@ -1,40 +1,32 @@
 import { hasAnyRoles } from '../auth';
 import * as TokenModule from '../token';
 
-describe ('hasAnyRoles tests', () => {
+describe('hasAnyRoles tests', () => {
+   test('Should return true when empty list', () => {
+      const result = hasAnyRoles([]);
 
-    test('Should return true when empty list', () => {
+      expect(result).toEqual(true);
+   });
 
-        const result = hasAnyRoles([]);
+   test('Should return true when user has given role', () => {
+      jest.spyOn(TokenModule, 'getTokenData').mockReturnValue({
+         exp: 0,
+         user_name: '',
+         authorities: ['ROLE_ADMIN', 'ROLE_OPERATOR'],
+      });
 
-        expect(result).toEqual(true);
+      const result = hasAnyRoles(['ROLE_ADMIN']);
+      expect(result).toEqual(true);
+   });
 
-    });
+   test.only('Should return false when user does not have given role', () => {
+      jest.spyOn(TokenModule, 'getTokenData').mockReturnValue({
+         exp: 0,
+         user_name: '',
+         authorities: ['ROLE_OPERATOR'],
+      });
 
-
-    test('Should return true when user has given role', () => {
-
-        jest.spyOn(TokenModule, 'getTokenData').mockReturnValue({
-            exp: 0,
-            user_name: '',
-            authorities: ['ROLE_ADMIN','ROLE_OPERATOR']
-        })
-
-        const result = hasAnyRoles(['ROLE_ADMIN']);
-        expect(result).toEqual(true);
-
-    });
-
-    test.only('Should return false when user does not have given role', () => {
-
-        jest.spyOn(TokenModule, 'getTokenData').mockReturnValue({
-            exp: 0,
-            user_name: '',
-            authorities: ['ROLE_OPERATOR']
-        })
-        
-        const result = hasAnyRoles(['ROLE_ADMIN']);
-        expect(result).toEqual(false);
-
-    });
+      const result = hasAnyRoles(['ROLE_ADMIN']);
+      expect(result).toEqual(false);
+   });
 });

@@ -25,7 +25,6 @@ const List = () => {
       filterData: { name: '', category: null },
     });
 
-  // Muda a pagina, o filtro permanece
   const handlePageChange = (pageNumber: number) => {
     setControlComponentsData({
       activePage: pageNumber,
@@ -33,7 +32,6 @@ const List = () => {
     });
   };
 
-  // muda o filtro, pagina 0 e muda o filtro
   const handleSubmitFilter = (data: ProductFilterData) => {
     setControlComponentsData({
       activePage: 0,
@@ -65,18 +63,15 @@ const List = () => {
   return (
     <div className="product-crud-container">
       <div className="product-crud-bar-container">
-        {/* --- ADD BUTTON */}
         <Link to="/admin/products/create">
           <button className="btn btn-primary text-white btn-crud-add">
             ADICIONAR
           </button>
         </Link>
 
-        {/* --- SEARCH DIV */}
         <ProductFilter onSubmitFilter={handleSubmitFilter} />
       </div>
 
-      {/* --- PRODUCT LIST */}
       <div className="row">
         {page?.content.map((product) => (
           <div className="col-sm-6 col-md-12" key={product.id}>
@@ -95,5 +90,4 @@ const List = () => {
   );
 };
 
-// ternario =>  { (page) ? page.totalPages : 0} (se existe) ? tal : senao
 export default List;

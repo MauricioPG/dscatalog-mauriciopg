@@ -1,5 +1,3 @@
-/* eslint-disable testing-library/no-wait-for-multiple-assertions */
-/* eslint-disable testing-library/no-debugging-utils */
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Router, useParams } from 'react-router-dom';
@@ -34,19 +32,12 @@ describe('Product Form create tests', () => {
    });
 
    test('Should show toast and redirect when submit form correctly', async () => {
-      //ARRANGE
-
-      //ACT
       render(
          <Router history={history}>
             <ToastContainer />
             <Form />
          </Router>
       );
-
-      //screen.debug();
-
-      //ASSERT
       const nameInput = screen.getByTestId('name');
       const priceInput = screen.getByTestId('price');
       const imgUrlInput = screen.getByTestId('imgUrl');
@@ -81,18 +72,11 @@ describe('Product Form create tests', () => {
    });
 
    test('Should show 5 validation messages when just click submit', async () => {
-      //ARRANGE
-
-      //ACT
       render(
          <Router history={history}>
             <Form />
          </Router>
       );
-
-      //screen.debug();
-
-      //ASSERT
       const submitButton = screen.getByRole('button', { name: /salvar/i });
 
       userEvent.click(submitButton);
@@ -105,7 +89,6 @@ describe('Product Form create tests', () => {
    });
 
    test('Should clear validation messages when filling out the form', async () => {
-      //ARRANGE
       render(
          <Router history={history}>
             <Form />
@@ -162,21 +145,23 @@ describe('Product Form update tests', () => {
 
       await waitFor(() => {
          const nameInput = screen.getByTestId('name');
-         const priceInput = screen.getByTestId('price');
-         const imgUrlInput = screen.getByTestId('imgUrl');
-         const descriptionInput = screen.getByTestId('description');
 
-         const formElement = screen.getByTestId("form");
    
          expect(nameInput).toHaveValue(productResponse.name);
-         expect(priceInput).toHaveValue(String(productResponse.price));
-         expect(imgUrlInput).toHaveValue(productResponse.imgUrl);
-         expect(descriptionInput).toHaveValue(productResponse.description);
 
-         // ele espera encontrar o valor da opcao , no caso 2 e 3
-         const ids = productResponse.categories.map(x => String(x.id));
-         expect(formElement).toHaveFormValues({categories: ids });
       });
+
+      const priceInput = screen.getByTestId('price');
+      const imgUrlInput = screen.getByTestId('imgUrl');
+      const descriptionInput = screen.getByTestId('description');
+      const formElement = screen.getByTestId("form");
+
+      expect(priceInput).toHaveValue(String(productResponse.price));
+      expect(imgUrlInput).toHaveValue(productResponse.imgUrl);
+      expect(descriptionInput).toHaveValue(productResponse.description);
+
+      const ids = productResponse.categories.map(x => String(x.id));
+      expect(formElement).toHaveFormValues({categories: ids });
 
       const submitButton = screen.getByRole('button', { name: /salvar/i });
       userEvent.click(submitButton);

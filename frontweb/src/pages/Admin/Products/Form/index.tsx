@@ -11,228 +11,220 @@ import { requestBackend } from 'util/requests';
 import { toast } from 'react-toastify';
 
 import './styles.css';
-import { error } from 'console';
 
 type UrlParams = {
-  productId: string;
+   productId: string;
 };
 
 const Form = () => {
-  const { productId } = useParams<UrlParams>();
-  const isEditing = productId !== 'create';
-  const history = useHistory();
+   const { productId } = useParams<UrlParams>();
+   const isEditing = productId !== 'create';
+   const history = useHistory();
 
-  const [selectCategories, setSelectCategories] = useState<Category[]>([]);
+   const [selectCategories, setSelectCategories] = useState<Category[]>([]);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    control,
-  } = useForm<Product>();
+   const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      setValue,
+      control,
+   } = useForm<Product>();
 
-  //* GET VALUES FROM CAT */
-  useEffect(() => {
-    requestBackend({ url: '/categories' }).then((response) =>
-      setSelectCategories(response.data.content)
-    );
-  }, []);
+   useEffect(() => {
+      requestBackend({ url: '/categories' }).then((response) =>
+         setSelectCategories(response.data.content)
+      );
+   }, []);
 
-  // Quando editando, preenche os dados do card
-  useEffect(() => {
-    if (isEditing) {
-      requestBackend({ url: `/products/${productId}` }).then((response) => {
-        // type safety com cast
-        const product = response.data as Product;
+   useEffect(() => {
+      if (isEditing) {
+         requestBackend({ url: `/products/${productId}` }).then((response) => {
+            const product = response.data as Product;
 
-        setValue('name', product.name);
-        setValue('price', product.price);
-        setValue('description', product.description);
-        setValue('imgUrl', product.imgUrl);
-        setValue('categories', product.categories);
-      });
-    }
-  }, [isEditing, productId, setValue]);
+            setValue('name', product.name);
+            setValue('price', product.price);
+            setValue('description', product.description);
+            setValue('imgUrl', product.imgUrl);
+            setValue('categories', product.categories);
+         });
+      }
+   }, [isEditing, productId, setValue]);
 
-  const onSubmit = (formData: Product) => {
-    const data = {
-      ...formData,
-      price: String(formData.price).replace(',', '.'),
-    };
-    const config: AxiosRequestConfig = {
-      method: isEditing ? 'PUT' : 'POST',
-      url: isEditing ? `/products/${productId}` : '/products',
-      data: data,
-      withCredentials: true,
-    };
+   const onSubmit = (formData: Product) => {
+      const data = {
+         ...formData,
+         price: String(formData.price).replace(',', '.'),
+      };
+      const config: AxiosRequestConfig = {
+         method: isEditing ? 'PUT' : 'POST',
+         url: isEditing ? `/products/${productId}` : '/products',
+         data: data,
+         withCredentials: true,
+      };
 
-    requestBackend(config)
-    .then(() => {
-      toast.info('Produto cadastrado com sucesso!');
+      requestBackend(config)
+         .then(() => {
+            toast.info('Produto cadastrado com sucesso!');
+            history.push('/admin/products');
+         })
+         .catch((response) => {
+            toast.error('Erro ao cadastrar o produto ');
+         });
+   };
+
+   const handleCancel = () => {
       history.push('/admin/products');
-    })
-    .catch((response) => {
-      toast.error("Erro ao cadastrar o produto ");
-    });
-  };
+   };
 
-  const handleCancel = () => {
-    history.push('/admin/products');
-  };
+   return (
+      <div className="product-crud-container">
+         <div className="base-card product-crud-form-card">
+            <h1 className="product-crud-form-title">DADOS DO PRODUTO</h1>
 
-  return (
-    <div className="product-crud-container">
-      {/* --- DIV TITLE --- */}
-      <div className="base-card product-crud-form-card">
-        <h1 className="product-crud-form-title">DADOS DO PRODUTO</h1>
+            <form onSubmit={handleSubmit(onSubmit)} data-testid="form">
+               <div className="row product-crud-inputs-container">
+                  <div className="col-lg-6 product-crud-inputs-left">
+                     <div className="margin-botttom-30">
+                        <input
+                           {...register('name', {
+                              required: 'Campo Obrigatório',
+                              minLength: 5,
+                           })}
+                           type="text"
+                           className={`form-control base-input ${
+                              errors.name ? 'is-invalid' : ''
+                           }`}
+                           placeholder="Nome do produto"
+                           name="name"
+                           data-testid="name"
+                        />
+                        <div className="invalid-feedback d-block">
+                           {errors.name && errors.name.type === 'minLength' && (
+                              <span>Mínimo 5 caracteres</span>
+                           )}
+                        </div>
+                        <div className="invalid-feedback d-block">
+                           {errors.name && errors.name.type === 'required' && (
+                              <span>Campo obrigatório</span>
+                           )}
+                        </div>
+                     </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} data-testid="form">
-          {/* --- DIV CENTER --- */}
-          <div className="row product-crud-inputs-container">
-            {/* --- DIV COMBOS --- */}
-            <div className="col-lg-6 product-crud-inputs-left">
-              <div className="margin-botttom-30">
-                <input
-                  {...register('name', {
-                    required: 'Campo Obrigatório',
-                    minLength: 5,
-                  })}
-                  type="text"
-                  className={`form-control base-input ${
-                    errors.name ? 'is-invalid' : ''
-                  }`}
-                  placeholder="Nome do produto"
-                  name="name"
-                  data-testid="name"
-                />
-                <div className="invalid-feedback d-block">
-                  {errors.name && errors.name.type === 'minLength' && (
-                    <span>Mínimo 5 caracteres</span>
-                  )}
-                </div>
-                <div className="invalid-feedback d-block">
-                  {errors.name && errors.name.type === 'required' && (
-                    <span>Campo obrigatório</span>
-                  )}
-                </div>
-              </div>
+                     <div className="margin-botttom-30">
+                        <label htmlFor="categories" className="d-none">
+                           Categorias
+                        </label>
+                        <Controller
+                           name="categories"
+                           rules={{ required: true }}
+                           control={control}
+                           render={({ field }) => (
+                              <Select
+                                 {...field}
+                                 options={selectCategories}
+                                 classNamePrefix="product-crud-select"
+                                 isMulti
+                                 getOptionLabel={(categoy: Category) =>
+                                    categoy.name
+                                 }
+                                 getOptionValue={(categoy: Category) =>
+                                    String(categoy.id)
+                                 }
+                                 inputId="categories"
+                              />
+                           )}
+                        />
+                        {errors.categories && (
+                           <div className="invalid-feedback d-block">
+                              Campo obrigatório
+                           </div>
+                        )}
+                     </div>
 
-              {/* combo box categories */}
-              {/* Obs: field desestruturado */}
-              <div className="margin-botttom-30">
-              {/* para o teste */}
-              <label htmlFor="categories" className="d-none">Categorias</label>
-                <Controller
-                  name="categories"
-                  rules={{ required: true }}
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={selectCategories}
-                      classNamePrefix="product-crud-select"
-                      isMulti
-                      getOptionLabel={(categoy: Category) => categoy.name}
-                      getOptionValue={(categoy: Category) => String(categoy.id)}
-                      //por conta do teste
-                      inputId="categories"
-                    />
-                  )}
-                />
-                {errors.categories && (
-                  <div className="invalid-feedback d-block">
-                    Campo obrigatório
+                     <div className="margin-botttom-30">
+                        <Controller
+                           name="price"
+                           rules={{ required: 'Campo obrigatório' }}
+                           control={control}
+                           render={({ field }) => (
+                              <CurrencyInput
+                                 placeholder="Preço"
+                                 className={`form-control base-input ${
+                                    errors.name ? 'is-invalid' : ''
+                                 }`}
+                                 disableGroupSeparators={true}
+                                 value={field.value}
+                                 onValueChange={field.onChange}
+                                 data-testid="price"
+                              />
+                           )}
+                        />
+                        <div className="invalid-feedback d-block">
+                           {errors.price?.message}
+                        </div>
+                     </div>
+
+                     <div className="margin-botttom-30">
+                        <input
+                           {...register('imgUrl', {
+                              required: 'Campo obrigatório',
+                              pattern: {
+                                 value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm,
+                                 message: 'Deve ser uma URL válida',
+                              },
+                           })}
+                           type="text"
+                           className={`form-control base-input ${
+                              errors.name ? 'is-invalid' : ''
+                           }`}
+                           placeholder="URL da imagem do produto"
+                           name="imgUrl"
+                           data-testid="imgUrl"
+                        />
+                        <div className="invalid-feedback d-block">
+                           {errors.imgUrl?.message}
+                        </div>
+                     </div>
                   </div>
-                )}
-              </div>
 
-              <div className="margin-botttom-30">
-                <Controller
-                  name="price"
-                  rules={{ required: 'Campo obrigatório' }}
-                  control={control}
-                  render={({ field }) => (
-                    <CurrencyInput
-                      placeholder="Preço"
-                      className={`form-control base-input ${
-                        errors.name ? 'is-invalid' : ''
-                      }`}
-                      disableGroupSeparators={true}
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      data-testid="price"
-                    />
-                  )}
-                />
-                <div className="invalid-feedback d-block">
-                  {errors.price?.message}
-                </div>
-              </div>
+                  <div className="col-lg-6">
+                     <div>
+                        {' '}
+                        <textarea
+                           rows={10}
+                           {...register('description', {
+                              required: 'Campo obrigatório',
+                           })}
+                           className={`form-control base-input h-auto ${
+                              errors.name ? 'is-invalid' : ''
+                           }`}
+                           placeholder="Descrição"
+                           name="description"
+                           data-testid="description"
+                        />
+                        <div className="invalid-feedback d-block">
+                           {errors.description?.message}
+                        </div>
+                     </div>
+                  </div>
+               </div>
 
-              {/* DIV IMG */}
-              <div className="margin-botttom-30">
-                <input
-                  {...register('imgUrl', {
-                    required: 'Campo obrigatório',
-                    pattern: {
-                      value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm,
-                      message: 'Deve ser uma URL válida',
-                    },
-                  })}
-                  type="text"
-                  className={`form-control base-input ${
-                    errors.name ? 'is-invalid' : ''
-                  }`}
-                  placeholder="URL da imagem do produto"
-                  name="imgUrl"
-                  data-testid="imgUrl"
-                />
-                <div className="invalid-feedback d-block">
-                  {errors.imgUrl?.message}
-                </div>
-              </div>
-            </div>
-
-            {/* --- DIV DESCRIPTION --- */}
-            <div className="col-lg-6">
-              <div>
-                {' '}
-                <textarea
-                  rows={10}
-                  {...register('description', {
-                    required: 'Campo obrigatório',
-                  })}
-                  className={`form-control base-input h-auto ${
-                    errors.name ? 'is-invalid' : ''
-                  }`}
-                  placeholder="Descrição"
-                  name="description"
-                  data-testid="description"
-                />
-                <div className="invalid-feedback d-block">
-                  {errors.description?.message}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* --- DIV BUTTONS --- */}
-          <div className="product-crud-buttons-container">
-            <button
-              className="btn btn-outline-danger product-crud-button"
-              onClick={handleCancel}
-            >
-              CANCELAR
-            </button>
-            <button className="btn btn-primary product-crud-button text-white">
-              SALVAR
-            </button>
-          </div>
-        </form>
+               <div className="product-crud-buttons-container">
+                  <button
+                     className="btn btn-outline-danger product-crud-button"
+                     onClick={handleCancel}
+                  >
+                     CANCELAR
+                  </button>
+                  <button className="btn btn-primary product-crud-button text-white">
+                     SALVAR
+                  </button>
+               </div>
+            </form>
+         </div>
       </div>
-    </div>
-  );
+   );
 };
 
 export default Form;
